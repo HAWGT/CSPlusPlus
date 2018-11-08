@@ -57,5 +57,15 @@ namespace CSGSI.Nodes
                 return _weapons[index];
             }
         }
+
+        public bool ContainsWeapon(string weaponName)
+        {
+            foreach (WeaponNode w in _weapons)
+            {
+                if (w.Name == weaponName)
+                    return true;
+            }
+            return false;
+        }
     }
 }

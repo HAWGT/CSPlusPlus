@@ -75,6 +75,26 @@ namespace CSGOPlusPlus
             return chk_death.Checked;
         }
 
+        public bool SpecialKill()
+        {
+            return chk_spkill.Checked;
+        }
+
+        public bool Taser()
+        {
+            return chk_taser.Checked;
+        }
+
+        public bool Ace()
+        {
+            return chk_ace.Checked;
+        }
+
+        public bool SpecialAce()
+        {
+            return chk_space.Checked;
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             Environment.Exit(Environment.ExitCode);

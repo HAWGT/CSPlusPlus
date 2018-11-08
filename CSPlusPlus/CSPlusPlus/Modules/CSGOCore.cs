@@ -19,6 +19,10 @@ namespace CSGOPlusPlus.Modules
 
         public static GameStateListener _gsl;
 
+        private VirtualKeyCode slot1 = VirtualKeyCode.VK_1;
+        private VirtualKeyCode slot2 = VirtualKeyCode.VK_2;
+        private VirtualKeyCode slot3 = VirtualKeyCode.VK_3;
+
         private VirtualKeyCode killKey = VirtualKeyCode.VK_6;
         private VirtualKeyCode killHSKey = VirtualKeyCode.VK_7;
         private VirtualKeyCode moneyKey = VirtualKeyCode.VK_8;
@@ -30,8 +34,16 @@ namespace CSGOPlusPlus.Modules
         private VirtualKeyCode knifeKey = VirtualKeyCode.VK_L;
         private VirtualKeyCode assistKey = VirtualKeyCode.VK_V;
         private VirtualKeyCode deathKey = VirtualKeyCode.VK_N;
+        private VirtualKeyCode spKillKey = VirtualKeyCode.VK_F;
+        private VirtualKeyCode aceKey = VirtualKeyCode.VK_J;
+        private VirtualKeyCode spAceKey = VirtualKeyCode.VK_T;
+        private VirtualKeyCode taserKey = VirtualKeyCode.VK_H;
 
-        private readonly int CS_MAXMONEY = 16000;
+        private readonly int CS_MM_MAXMONEY = 16000;
+        private readonly int CS_WM_MAXMONEY = 8000;
+
+        private readonly int CS_MM_TEAMSIZE = 5;
+        private readonly int CS_WM_TEAMSIZE = 2;
 
         private int lastKills = 0;
         private int lastKillsHS = 0;
@@ -76,7 +88,7 @@ namespace CSGOPlusPlus.Modules
 
         private void OnNewGameState(GameState gs)
         {
-            if (player == null) player = gs.Player.SteamID;
+            player = gs.Provider.SteamID;
             rounds = gs.Map.Round;
             if (rounds >= 0)
             {
@@ -114,88 +126,156 @@ namespace CSGOPlusPlus.Modules
 
                 if (gs.Player.Weapons.ActiveWeapon.State != CSGSI.Nodes.WeaponState.Reloading) reloading = false;
 
-                if (money < CS_MAXMONEY) maxMoney = false;
+                if (money < CS_MM_MAXMONEY && gs.Map.Mode != MapMode.ScrimComp2v2) maxMoney = false;
+                if (money < CS_WM_MAXMONEY && gs.Map.Mode == MapMode.ScrimComp2v2) maxMoney = false;
 
                 if (gs.Player.Weapons.ActiveWeapon.Type != WeaponType.Knife) knife = false;
 
-                if (killsHS != lastKillsHS && killsHS > 0)
+
+                //TASER
+
+                if (gs.Player.Weapons.ContainsWeapon("weapon_taser"))
                 {
-                    if (killsHS > lastKillsHS && mainForm.Kill())
+                    BindExecuter.ExecuteBind(slot3, mainForm.Taser());
+                    if (gs.Player.Weapons.ActiveWeapon.Name == "weapon_taser")
                     {
-                        BindExecuter.ExecuteBind(killHSKey);
+                        BindExecuter.ExecuteBind(taserKey, mainForm.Taser());
+                        BindExecuter.ExecuteBind(slot2, mainForm.Taser());
+                        BindExecuter.ExecuteBind(slot1, mainForm.Taser());
                     }
-                    lastKillsHS = killsHS;
                 }
 
-                if (mvps != lastMVPs && mvps > 0)
+                //ACE ALL HS
+
+                if (killsHS != lastKillsHS && killsHS == CS_MM_TEAMSIZE && gs.Map.Mode != MapMode.ScrimComp2v2)
                 {
-                    if (mvps > lastMVPs && mainForm.MVP())
-                    {
-                        BindExecuter.ExecuteBind(mvpKey);
-                    }
-                    lastMVPs = mvps;
+                    BindExecuter.ExecuteBind(spAceKey, mainForm.SpecialAce());
                 }
 
-                if (kills != lastKills && kills > 0)
+                if (killsHS != lastKillsHS && killsHS == CS_WM_TEAMSIZE && gs.Map.Mode == MapMode.ScrimComp2v2)
                 {
-                    if (kills > lastKills && mainForm.Kill())
+                    BindExecuter.ExecuteBind(spAceKey, mainForm.SpecialAce());
+                }
+
+                //ACE
+
+                if (kills != lastKills && kills == CS_MM_TEAMSIZE && gs.Map.Mode != MapMode.ScrimComp2v2)
+                {
+                    BindExecuter.ExecuteBind(aceKey, mainForm.Ace());
+                }
+
+                if (kills != lastKills && kills == CS_WM_TEAMSIZE && gs.Map.Mode == MapMode.ScrimComp2v2)
+                {
+                    BindExecuter.ExecuteBind(aceKey, mainForm.Ace());
+                }
+
+
+                //KNIFE KILL
+                if (kills != lastKills && kills > 0 && gs.Player.Weapons.ActiveWeapon.Type == WeaponType.Knife)
+                {
+                    if (kills > lastKills)
                     {
-                        BindExecuter.ExecuteBind(killKey);
+                        BindExecuter.ExecuteBind(spKillKey, mainForm.SpecialKill());
                     }
                     lastKills = kills;
                 }
 
+                //MVP
+                if (mvps != lastMVPs && mvps > 0)
+                {
+                    if (mvps > lastMVPs)
+                    {
+                        BindExecuter.ExecuteBind(mvpKey, mainForm.MVP());
+                    }
+                    lastMVPs = mvps;
+                }
+
+                //HS KILL
+                if (killsHS != lastKillsHS && killsHS > 0)
+                {
+                    if (killsHS > lastKillsHS)
+                    {
+                        BindExecuter.ExecuteBind(killHSKey, mainForm.Kill());
+                    }
+                    lastKillsHS = killsHS;
+                }
+
+                //KILL
+                if (kills != lastKills && kills > 0)
+                {
+                    if (kills > lastKills)
+                    {
+                        BindExecuter.ExecuteBind(killKey, mainForm.KillHS());
+                    }
+                    lastKills = kills;
+                }
+
+                //ASSISTS
                 if (assists != lastAssists && assists > 0)
                 {
-                    if (assists > lastAssists && mainForm.Assist())
+                    if (assists > lastAssists)
                     {
-                        BindExecuter.ExecuteBind(assistKey);
+                        BindExecuter.ExecuteBind(assistKey, mainForm.Assist());
                     }
                     lastAssists = assists;
                 }
 
+                //DEATH
                 if (deaths != lastDeaths && deaths > 0)
                 {
-                    if (deaths > lastDeaths && mainForm.Death())
+                    if (deaths > lastDeaths)
                     {
-                        BindExecuter.ExecuteBind(deathKey);
+                        BindExecuter.ExecuteBind(deathKey, mainForm.Death());
                     }
                     lastDeaths = deaths;
                 }
 
-                if (money == CS_MAXMONEY && !maxMoney && mainForm.Money())
+                //16K MONEY
+                if (money == CS_MM_MAXMONEY && gs.Map.Mode != MapMode.ScrimComp2v2 && !maxMoney)
                 {
-                    BindExecuter.ExecuteBind(moneyKey);
+                    BindExecuter.ExecuteBind(moneyKey, mainForm.Money());
                     maxMoney = true;
                 }
 
-                if (flash > 0 && !flashed && mainForm.Flash())
+                //8K MONEY
+                if (money == CS_MM_MAXMONEY && gs.Map.Mode == MapMode.ScrimComp2v2 && !maxMoney)
                 {
-                    BindExecuter.ExecuteBind(flashKey);
+                    BindExecuter.ExecuteBind(moneyKey, mainForm.Money());
+                    maxMoney = true;
+                }
+
+                //FLASH
+                if (flash > 0 && !flashed)
+                {
+                    BindExecuter.ExecuteBind(flashKey, mainForm.Flash());
                     flashed = true;
                 }
 
-                if (burn > 0 && !burning && mainForm.Burn())
+                //BURN
+                if (burn > 0 && !burning)
                 {
-                    BindExecuter.ExecuteBind(burnKey);
+                    BindExecuter.ExecuteBind(burnKey, mainForm.Burn());
                     burning = true;
                 }
 
-                if (smoke > 0 && !smoked && mainForm.Smoke())
+                //SMOKE
+                if (smoke > 0 && !smoked)
                 {
-                    BindExecuter.ExecuteBind(smokeKey);
+                    BindExecuter.ExecuteBind(smokeKey, mainForm.Smoke());
                     smoked = true;
                 }
 
-                if (gs.Player.Weapons.ActiveWeapon.State == CSGSI.Nodes.WeaponState.Reloading && !reloading && mainForm.Reload())
+                //RELOAD
+                if (gs.Player.Weapons.ActiveWeapon.State == CSGSI.Nodes.WeaponState.Reloading && !reloading)
                 {
-                    BindExecuter.ExecuteBind(reloadKey);
+                    BindExecuter.ExecuteBind(reloadKey, mainForm.Reload());
                     reloading = true;
                 }
 
-                if (gs.Player.Weapons.ActiveWeapon.Type == WeaponType.Knife && !knife && mainForm.Knife())
+                //KNIFE
+                if (gs.Player.Weapons.ActiveWeapon.Type == WeaponType.Knife && !knife)
                 {
-                    BindExecuter.ExecuteBind(knifeKey);
+                    BindExecuter.ExecuteBind(knifeKey, mainForm.Knife());
                     knife = true;
                 }
             } 

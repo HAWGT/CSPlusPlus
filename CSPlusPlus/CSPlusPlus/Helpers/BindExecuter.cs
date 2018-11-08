@@ -9,8 +9,9 @@ namespace CSGOPlusPlus.Helpers
 {
     class BindExecuter
     {
-        public static void ExecuteBind(VirtualKeyCode vkey)
+        public static void ExecuteBind(VirtualKeyCode vkey, bool allow)
         {
+            if (!allow) return;
             KBMHelper.PressKey(vkey);
         }
     }

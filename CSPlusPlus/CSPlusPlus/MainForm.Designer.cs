@@ -40,6 +40,10 @@
             this.chk_knife = new System.Windows.Forms.CheckBox();
             this.chk_assist = new System.Windows.Forms.CheckBox();
             this.chk_death = new System.Windows.Forms.CheckBox();
+            this.chk_spkill = new System.Windows.Forms.CheckBox();
+            this.chk_taser = new System.Windows.Forms.CheckBox();
+            this.chk_ace = new System.Windows.Forms.CheckBox();
+            this.chk_space = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // chk_kill
@@ -163,12 +167,60 @@
             this.chk_death.Text = "Death Bind";
             this.chk_death.UseVisualStyleBackColor = true;
             // 
+            // chk_spkill
+            // 
+            this.chk_spkill.AutoSize = true;
+            this.chk_spkill.ForeColor = System.Drawing.Color.Orange;
+            this.chk_spkill.Location = new System.Drawing.Point(123, 12);
+            this.chk_spkill.Name = "chk_spkill";
+            this.chk_spkill.Size = new System.Drawing.Size(101, 17);
+            this.chk_spkill.TabIndex = 13;
+            this.chk_spkill.Text = "Special Kill Bind";
+            this.chk_spkill.UseVisualStyleBackColor = true;
+            // 
+            // chk_taser
+            // 
+            this.chk_taser.AutoSize = true;
+            this.chk_taser.ForeColor = System.Drawing.Color.Orange;
+            this.chk_taser.Location = new System.Drawing.Point(123, 35);
+            this.chk_taser.Name = "chk_taser";
+            this.chk_taser.Size = new System.Drawing.Size(128, 17);
+            this.chk_taser.TabIndex = 14;
+            this.chk_taser.Text = "Auto Drop Taser Bind";
+            this.chk_taser.UseVisualStyleBackColor = true;
+            // 
+            // chk_ace
+            // 
+            this.chk_ace.AutoSize = true;
+            this.chk_ace.ForeColor = System.Drawing.Color.Orange;
+            this.chk_ace.Location = new System.Drawing.Point(123, 58);
+            this.chk_ace.Name = "chk_ace";
+            this.chk_ace.Size = new System.Drawing.Size(69, 17);
+            this.chk_ace.TabIndex = 15;
+            this.chk_ace.Text = "Ace Bind";
+            this.chk_ace.UseVisualStyleBackColor = true;
+            // 
+            // chk_space
+            // 
+            this.chk_space.AutoSize = true;
+            this.chk_space.ForeColor = System.Drawing.Color.Orange;
+            this.chk_space.Location = new System.Drawing.Point(123, 81);
+            this.chk_space.Name = "chk_space";
+            this.chk_space.Size = new System.Drawing.Size(107, 17);
+            this.chk_space.TabIndex = 16;
+            this.chk_space.Text = "Special Ace Bind";
+            this.chk_space.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Navy;
             this.ClientSize = new System.Drawing.Size(308, 287);
+            this.Controls.Add(this.chk_space);
+            this.Controls.Add(this.chk_ace);
+            this.Controls.Add(this.chk_taser);
+            this.Controls.Add(this.chk_spkill);
             this.Controls.Add(this.chk_death);
             this.Controls.Add(this.chk_assist);
             this.Controls.Add(this.chk_knife);
@@ -203,6 +255,10 @@
         private System.Windows.Forms.CheckBox chk_knife;
         private System.Windows.Forms.CheckBox chk_assist;
         private System.Windows.Forms.CheckBox chk_death;
+        private System.Windows.Forms.CheckBox chk_spkill;
+        private System.Windows.Forms.CheckBox chk_taser;
+        private System.Windows.Forms.CheckBox chk_ace;
+        private System.Windows.Forms.CheckBox chk_space;
     }
 }
 
