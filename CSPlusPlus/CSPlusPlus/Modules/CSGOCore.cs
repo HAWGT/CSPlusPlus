@@ -195,7 +195,7 @@ namespace CSGOPlusPlus.Modules
                 {
                     if (killsHS > lastKillsHS)
                     {
-                        BindExecuter.ExecuteBind(killHSKey, mainForm.Kill());
+                        BindExecuter.ExecuteBind(killHSKey, mainForm.KillHS());
                     }
                     lastKillsHS = killsHS;
                 }
@@ -205,7 +205,7 @@ namespace CSGOPlusPlus.Modules
                 {
                     if (kills > lastKills)
                     {
-                        BindExecuter.ExecuteBind(killKey, mainForm.KillHS());
+                        BindExecuter.ExecuteBind(killKey, mainForm.Kill());
                     }
                     lastKills = kills;
                 }
